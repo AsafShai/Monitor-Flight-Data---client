@@ -7,21 +7,24 @@ class ADIComponent extends Component {
         super(props);
         this.maxAdi = 100;
         this.minAdi = -100;
-        this.result = 0;
+        this.precentage = 0;
         
     }
 
+    /**
+     * returns the precentage of blue based on the ADI props and the range of ADI
+     */
     calculatePercantage() {
         var difference = this.maxAdi - this.minAdi;
-        var result = Number((this.props.ADI * 100 / difference) + 50);
-        return result;
+        var precentage = Number((this.props.ADI * 100 / difference) + 50);
+        return precentage;
     }
 
 
     render() {
-        this.result = this.calculatePercantage();
+        this.precentage = this.calculatePercantage();
         return <div className="adi-border" style={{background:`linear-gradient(  rgb(0,113,255)
-                ${this.result}%, rgb(75,255,50) ${this.result}% )`}}>
+                ${this.precentage}%, rgb(75,255,50) ${this.precentage}% )`}}>
         </div>
     }
 }

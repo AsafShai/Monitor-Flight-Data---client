@@ -19,12 +19,17 @@ class App extends Component {
     }
   }
 
+  /**
+   * connects to the server with a tcp connection,
+   *  and recieves flight data from the server
+   */
   componentWillMount() {
     const socket = io(ENDPOINT);
-    socket.on("sendingData", data => {
-      this.setState({Altitude: data.altitude, HIS: data.his, ADI: data.adi})
+    socket.on("sendingData", flightData => {
+      this.setState({Altitude: flightData.altitude, HIS: flightData.his, ADI: flightData.adi})
     })
   }
+
   render() {
     return (
       <div>

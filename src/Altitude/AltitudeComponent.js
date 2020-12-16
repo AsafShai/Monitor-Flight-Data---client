@@ -1,77 +1,105 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class AltitudeComponent extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.ctx = this.canvas = null;
-        this.width = 100
-        this.height = 200
-        this.thickness = 5
-        this.max = 3000
+        this.canvasWidth = 100;
+        this.canvasHeight = 200;
+        this.thickness = 5;
+        this.meterHeight = this.canvasHeight - this.thickness * 2;
+        this.meterWidth = this.canvasWidth - this.thickness * 2;
+        this.maxAltitude = 3000;
     }
-    componentDidUpdate(){
-        this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height)
-        this.drawBar(this.props.altitude)
-        
+
+    /**
+     * clears the canvas and draws the updated altitude
+     */
+    componentDidUpdate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.drawAltitudeMeter(this.props.altitude);
     }
     
+    /**
+     * initiazes the canvas and draws the altitude
+     */
     componentDidMount() {
         this.canvas = this.refs.canvas;
         this.ctx = this.canvas.getContext("2d");
         
-        this.drawBar(parseInt(this.props.altitude));
+        this.drawAltitudeMeter(parseInt(this.props.altitude));
     }
-
-    drawBar(altitude)
-    {
+    
+    /**
+     * draws the altitude meter and the current altitude
+     * @param {*} altitude the place of the bar on the meter
+     */
+    drawAltitudeMeter(altitude) {
         this.ctx.beginPath();
-        this.drawBorder()
-        this.drawInside()
-        this.drawNumbers()
-        this.ctx.save()
-        this.putBarOn(altitude)
-        this.ctx.restore()
-    }
-    drawNumbers(){
-        var num;
-        this.ctx.save()
-        this.ctx.fillStyle = '#333'
-        this.ctx.font = this.width * 0.15 + "px arial";
-        this.ctx.textBaseline = "middle";
-        this.ctx.textAlign = "center"; 
-        this.ctx.translate(this.width/2,15)
-        for (num =this.max; num >=0 ; num-=1000) {
-            this.ctx.fillText(num.toString(), 0, 0);
-            this.ctx.translate(0, this.height/3.45);
-        }
-        this.ctx.restore()
-    }
-    putBarOn(altitude){
-        this.ctx.strokeStyle = 'blue';
-        this.ctx.lineWidth = 5
-        let desiredAlititude = this.height - this.thickness - (this.height- this.thickness*2)*(altitude/this.max)
-        this.ctx.moveTo(0,desiredAlititude)
-        this.ctx.lineTo(this.width+10,desiredAlititude)
-        this.ctx.stroke()
-        this.ctx.restore()
-    }
-    drawBorder(){
-        this.ctx.fillStyle = 'black';
-        this.ctx.fill()
-        this.ctx.fillRect(0,0,this.width,this.height)
-    }
-    drawInside(){
-        this.ctx.fillStyle = 'white';
-        this.ctx.fill()
-        this.ctx.fillRect(this.thickness,this.thickness,this.width-this.thickness*2,this.height-this.thickness*2)
+        this.drawMeterBorder();
+        this.drawMeter();
+        this.drawNumbers();
+        this.ctx.save();
+        this.drawAltitudeBar(altitude);
+        this.ctx.restore();
     }
 
+    /**
+     * draws the numbers of the meter
+     */
+    drawNumbers() {
+        var num;
+        this.ctx.save();
+        this.ctx.fillStyle = "#333";
+        this.ctx.font = this.canvasWidth * 0.15 + "px arial";
+        this.ctx.textBaseline = "middle";
+        this.ctx.textAlign = "center";
+        this.ctx.translate(this.canvasWidth / 2, 15);
+        for (num = this.maxAltitude; num >= 0; num -= 1000) {
+            this.ctx.fillText(num.toString(), 0, 0);
+            this.ctx.translate(0, this.canvasHeight / 3.45);
+        }
+        this.ctx.restore();
+    }
+
+    /**
+     * draws the bar on the correct @altitude height
+     * @param {*} altitude the place of the bar on the meter
+     */
+    drawAltitudeBar(altitude) {
+        this.ctx.strokeStyle = "blue";
+        this.ctx.lineWidth = 5;
+        let desiredAlititude = this.canvasHeight - this.thickness -
+            this.meterHeight * (altitude / this.maxAltitude);
+        this.ctx.moveTo(0, desiredAlititude);
+        this.ctx.lineTo(this.canvasWidth + 10, desiredAlititude);
+        this.ctx.stroke();
+        this.ctx.restore();
+    }
+
+    /**
+     * draws the border of the meter
+     */
+    drawMeterBorder() {
+        this.ctx.fillStyle = "black";
+        this.ctx.fill();
+        this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+    }
+
+    /**
+     * draws the meter background
+     */
+    drawMeter() {
+        this.ctx.fillStyle = "white";
+        this.ctx.fill();
+        this.ctx.fillRect(this.thickness, this.thickness, this.meterWidth,
+             this.meterHeight);
+    }
 
     render() {
         return (
             <div>
-                <canvas ref="canvas" id="canvas" width="275" height="275">
-                </canvas>
+                <canvas ref="canvas" id="canvas" width="275" height="275"></canvas>
             </div>
         );
     }
