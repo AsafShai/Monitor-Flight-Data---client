@@ -1,0 +1,7 @@
+div.adi-border{
+    width: 275px;
+    height: 275px;
+    border-radius: 50%;
+    border: 3px solid black;
+    background: linear-gradient(  rgb(0,113,255) 50%, rgb(75,255,50) 50% );
+}

@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+
+div.jumbotron {
+  width:70%;
+  max-width: 3000px;
+  min-height: 400px;
+  margin:0 auto;
+  margin-top: 100px;
+  padding: 100px;
+}
+
+div.button-wrapper button.btn.btn-primary {
+  margin: 5px;
+}

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import TextualMonitor from './Components/TextualMonitor'
+import TextualMonitor from './TextualMonitor/TextualMonitor'
 import io from 'socket.io-client'
+import VisualMonitor from './VisualMonitor';
 
 const ENDPOINT = "http://127.0.0.1:4000";
 
@@ -10,9 +11,9 @@ class App extends Component {
     super();
     this.state = {
       response: 0,
-      Altitude: null,
-      HIS: null,
-      ADI: null,
+      Altitude: 0,
+      HIS: 0,
+      ADI: 0,
       isVisual: false,
       isTextual: true
     }
@@ -27,10 +28,15 @@ class App extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.setTextual}>Textual</button>
-        <br/>
-        <button onClick={this.setVisual}>Visual</button>
-        {this.state.isTextual ? <TextualMonitor Altitude={this.state.Altitude} HIS={this.state.HIS} ADI={this.state.ADI}/> : null}
+        <div className="jumbotron jumbotron-fluid">
+          <div className="button-wrapper" style={{left:"0px", width:"200px", padding:"10px"}}>
+            <button onClick={this.setTextual} className="btn btn-primary">Textual</button>
+            <button onClick={this.setVisual} className="btn btn-primary">Visual</button>
+          </div>
+
+          {this.state.isTextual ? <TextualMonitor Altitude={this.state.Altitude} HIS={this.state.HIS} ADI={this.state.ADI}/> : null}
+          {this.state.isVisual ? <VisualMonitor Altitude={this.state.Altitude} HIS={this.state.HIS} ADI={this.state.ADI}/> : null}
+        </div>
       </div>
     );
   }
